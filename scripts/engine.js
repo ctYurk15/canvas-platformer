@@ -3,6 +3,7 @@ class Engine
     game_objects = [];
     keys = {};
     button_actions = [];
+    release_button_actions = [];
     frame_actions = [];
     is_working = false;
 
@@ -33,7 +34,12 @@ class Engine
 
     addButtonPressEvent(button, action)
     {
-        this.button_actions.push({key: button, action: action});
+        this.button_actions.push({code: button, action: action});
+    }
+
+    addButtonReleaseEvent(button, action)
+    {
+        this.release_button_actions.push({code: button, action: action});
     }
 
     addFrameAction(action)
@@ -85,13 +91,14 @@ class Engine
 
         if(this.is_working)
         {
+            //press button, check all currently pressed butons
             window.addEventListener('keydown', (e) => {
             
-                self.keys[e.key] = true;
+                self.keys[e.code] = true;
                 
                 self.button_actions.forEach(function(button_action){
                     
-                    if(self.keys[button_action.key])
+                    if(self.keys[button_action.code])
                     {
                         button_action.action();
                     }
@@ -99,9 +106,18 @@ class Engine
                 });
             });
     
+            //release button, check only one released currently button
             window.addEventListener('keyup', (e) => {
-                self.keys[e.key] = false;
+                self.keys[e.code] = false;
     
+                self.release_button_actions.forEach(function(release_button_action){
+                    
+                    if(e.code == release_button_action.code)
+                    {
+                        release_button_action.action();
+                    }
+    
+                });
             });
         }
     }
