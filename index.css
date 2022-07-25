@@ -4,3 +4,37 @@ body
     padding: 0;
     overflow: hidden;
 }
+
+.hidden
+{
+    display: none !important;
+}
+
+.win-container
+{
+    position: absolute;
+    top: 25vh;
+    left: 25%;
+    background-color: rgb(172, 168, 168);
+    display: grid;
+    width: 50%;
+    height: 50vh;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+}
+
+.win-container button
+{
+    width: 200px;
+    height: 60px;
+    font-size: 1.2em;
+    border: 0;
+    cursor: pointer;
+}
+
+.win-container button:hover
+{
+    box-shadow: 1px 1px 8px gray;
+}
