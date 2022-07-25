@@ -5,10 +5,10 @@ canvas.height = window.innerHeight;
 const engine = new Engine(canvas, 'white');
 
 //creating gameobjects
-const player = new Player(90, 90, 50, 100, 'red', 5, 10, 65);
+const player = new Player(90, 90, 50, 100, 'red', 5, 10, 65, [50, 500], engine);
 const platforms = [
     new Platform(0, canvas.height-20, 250, 20, 'green'),
-    new Platform(550, canvas.height-200, 250, 20, 'green'),
+    new Platform(300, canvas.height-100, 400, 20, 'green'),
 ];
 
 //adding gameobjects to the scene

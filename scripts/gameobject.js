@@ -1,6 +1,7 @@
 class GameObject
 {
     id = null;
+    paralax_force = 0;
 
     constructor(x, y)
     {
