@@ -76,14 +76,13 @@ engine.addFrameAction(function(){
 
 //check for loosing
 engine.addFrameAction(function(){
-    if(player.y - player.width >= canvas.height)
+    if(player.y - 2 * player.width >= canvas.height)
     {
         engine.stop();
 
         setTimeout(function(){
             engine.clearObjects();
             start(engine, platforms_map);
-            console.log(platforms);
         }, death_interval);
     }
 });

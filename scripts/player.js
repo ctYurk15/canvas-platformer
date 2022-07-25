@@ -27,7 +27,7 @@ class Player extends Rectangle
                 this.paralax_scroll += Math.abs(this.velocity.x);
                 this.engine.paralaxMoveX(-1 * Math.abs(this.velocity.x));
             }
-            else if(this.x + this.velocity.x <= this.paralax_borders[0] && this.paralax_scroll + this.velocity.x >= 0)
+            else if(this.x + this.velocity.x <= this.paralax_borders[0] && this.paralax_scroll - Math.abs(this.velocity.x) >= 0)
             {
                 this.paralax_scroll -= Math.abs(this.velocity.x);
                 this.engine.paralaxMoveX(Math.abs(this.velocity.x));
