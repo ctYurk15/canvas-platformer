@@ -85,6 +85,12 @@ class Engine
         });
     }
 
+    clearObjects()
+    {
+        this.game_objects = [];
+        this.clear();
+    }
+
     checkButtonsPress()
     {
         const self = this;

@@ -41,7 +41,7 @@ class Player extends Rectangle
         this.y += this.velocity.y;
 
         this.velocity.y += this.gravity;
-        console.log('Scroll: ', this.paralax_scroll);
+        //console.log('Scroll: ', this.paralax_scroll);
     }
 
     //-1 for left, and +1 for right

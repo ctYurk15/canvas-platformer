@@ -1,3 +1,25 @@
+let player = null;
+let platforms = [];
+
+function start(engine, platforms_map)
+{
+    player = null;
+    platforms = [];
+
+    platforms_map.forEach(platform => {
+        platforms.push(new Platform(platform.x, platform.y, platform.width, platform.height, platform.color));
+    });
+
+    platforms.forEach(platform => {
+        engine.addObject(platform);
+    });
+
+    player = new Player(120, 90, 50, 100, 'red', 5, 10, 65, [100, 500], engine);
+    engine.addObject(player);
+    
+    engine.start();
+}
+
 const canvas = document.querySelector('canvas');
 const win_model = document.querySelector('.win-container');
 
@@ -5,12 +27,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const win_distance = 2600;
+const death_interval = 450;
 
 const engine = new Engine(canvas, 'white');
 
-//creating gameobjects
-const player = new Player(120, 90, 50, 100, 'red', 5, 10, 65, [100, 500], engine);
-const platforms = [
+//creating gamemap
+const platforms_map = [
     new Platform(0, canvas.height-20, 250, 20, 'green'),
     new Platform(300, canvas.height-100, 400, 20, 'green'),
     new Platform(850, canvas.height-100, 175, 20, 'green'),
@@ -20,12 +42,6 @@ const platforms = [
     new Platform(2350, canvas.height-50, 200, 20, 'green'),
     new Platform(2750, canvas.height-100, 400, 20, 'green'),
 ];
-
-//adding gameobjects to the scene
-platforms.forEach(platform => {
-    engine.addObject(platform);
-});
-engine.addObject(player);
 
 //adding collision checks
 engine.addFrameAction(function(){
@@ -58,6 +74,20 @@ engine.addFrameAction(function(){
     }
 });
 
+//check for loosing
+engine.addFrameAction(function(){
+    if(player.y - player.width >= canvas.height)
+    {
+        engine.stop();
+
+        setTimeout(function(){
+            engine.clearObjects();
+            start(engine, platforms_map);
+            console.log(platforms);
+        }, death_interval);
+    }
+});
+
 //adding controls
 engine.addButtonPressEvent('KeyA', function() {  player.startMove(-1); });
 engine.addButtonReleaseEvent('KeyA', function(){ player.stopMove(); });
@@ -67,7 +97,7 @@ engine.addButtonReleaseEvent('KeyD', function(){ player.stopMove(); });
 
 engine.addButtonPressEvent('KeyW', function(){  player.jump(); });
 
-engine.start();
+start(engine, platforms_map);
 
 //engine.start();
 let animation_frame;
