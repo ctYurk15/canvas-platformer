@@ -131,7 +131,10 @@ class Engine
     paralaxMoveX(speed)
     {
         this.game_objects.forEach(function(game_object){
-            game_object.x += game_object.paralax_force * speed;
+            let movement = game_object.paralax_force * speed;
+
+            game_object.x += movement;
+            game_object.paralax_scroll += movement;
         });
     }
 

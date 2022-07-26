@@ -2,6 +2,7 @@ class GameObject
 {
     id = null;
     paralax_force = 0;
+    paralax_scroll = 0;
 
     constructor(x, y)
     {

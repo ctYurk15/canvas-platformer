@@ -1,6 +1,9 @@
 let player = null;
+
 let platforms = [];
 let coins = [];
+let enemies = [];
+
 let coins_collected = 0;
 
 function start(engine, level_map)
@@ -9,6 +12,7 @@ function start(engine, level_map)
     player = null;
     platforms = [];
     coins = [];
+    enemies = [];
     coins_collected = 0;
 
     //reset ui
@@ -25,6 +29,11 @@ function start(engine, level_map)
         engine.addObject(coins[coins.length-1]);
     });
 
+    level_map.enemies.forEach(enemy => {
+        enemies.push(new Enemy(enemy.x, enemy.y, enemy.width, enemy.height, enemy.color, enemy.speed, enemy.moving_borders));
+        engine.addObject(enemies[enemies.length-1]);
+    });
+
     //respawn player
     player = new Player(120, 120, 50, 100, 'red', 5, 10, 65, [100, 500], engine);
     engine.addObject(player);
@@ -39,7 +48,7 @@ const coins_container = document.querySelector('#coinsContainer');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const win_distance = 2600;
+const win_distance = 300;
 const death_interval = 450;
 
 const engine = new Engine(canvas, 'white');
@@ -61,7 +70,11 @@ const levels_map = [
             new Platform(1500, canvas.height-300, 230, 20, 'green'),
             new Platform(1900, canvas.height-375, 175, 20, 'green'),
             new Platform(2350, canvas.height-50, 200, 20, 'green'),
-            new Platform(2750, canvas.height-100, 400, 20, 'green'),
+            new Platform(2750, canvas.height-100, 800, 20, 'green'),
+        ],
+        enemies: [
+            new Enemy(1200, canvas.height-300, 50, 100, 'blue', 5, [1100, 1350]),
+            new Enemy(2875, canvas.height-200, 50, 100, 'blue', 5, [2750, 3150]),
         ]
     }
 ];
