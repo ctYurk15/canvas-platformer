@@ -1,10 +1,23 @@
-let player = null;
+//game config
+const win_distance = 2900;
+const death_interval = 450;
 
+//current state
+let player = null;
 let platforms = [];
 let coins = [];
 let enemies = [];
-
 let coins_collected = 0;
+
+function die()
+{
+    engine.stop();
+
+    setTimeout(function(){
+        engine.clearObjects();
+        start(engine, levels_map[0]);
+    }, death_interval);
+}
 
 function start(engine, level_map)
 {
@@ -48,9 +61,6 @@ const coins_container = document.querySelector('#coinsContainer');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const win_distance = 300;
-const death_interval = 450;
-
 const engine = new Engine(canvas, 'white');
 
 //creating gamemap
@@ -73,8 +83,8 @@ const levels_map = [
             new Platform(2750, canvas.height-100, 800, 20, 'green'),
         ],
         enemies: [
-            new Enemy(1200, canvas.height-300, 50, 100, 'blue', 5, [1100, 1350]),
-            new Enemy(2875, canvas.height-200, 50, 100, 'blue', 5, [2750, 3150]),
+            new Enemy(1200, canvas.height-300, 50, 100, 'blue', 2, [1100, 1350]),
+            new Enemy(2875, canvas.height-200, 50, 100, 'blue', 2, [2750, 3150]),
         ]
     }
 ];
@@ -108,10 +118,8 @@ engine.addFrameAction(function(){
 
     for(let coin of coins)
     {
-        if(player.x + player.width >= coin.x 
-            && player.x + player.width <= coin.x + coin.width
-            && player.y + player.height >= coin.y
-            && player.y + player.height <= coin.y + coin.height)
+
+        if(player.rectangleCollided(coin))
         {
             coins_collected++;
             coins_container.innerHTML = 'Coins: '+coins_collected;
@@ -119,9 +127,19 @@ engine.addFrameAction(function(){
             engine.deleteObject(coin.id);
             break;
         }
+
     }
 
     if(collected_coin_id != null) coins = coins.filter(function(coin){ return coin.id != collected_coin_id });
+
+});
+
+//adding enemies collisions check
+engine.addFrameAction(function(){
+    
+    enemies.forEach(enemy => {
+        if(player.rectangleCollided(enemy)) die();
+    });
 
 });
 
@@ -136,15 +154,9 @@ engine.addFrameAction(function(){
 
 //check for loosing
 engine.addFrameAction(function(){
-    if(player.y - 2 * player.width >= canvas.height)
-    {
-        engine.stop();
 
-        setTimeout(function(){
-            engine.clearObjects();
-            start(engine, levels_map[0]);
-        }, death_interval);
-    }
+    if(player.y - 2 * player.width >= canvas.height) die();
+    
 });
 
 //adding controls
