@@ -38,7 +38,7 @@ function start(engine, level_map)
     });
 
     level_map.coins.forEach(coin => {
-        coins.push(new Coin(coin.x, coin.y, coin.width, coin.height, coin.color));
+        coins.push(new Coin(coin.x, coin.y, coin.width, coin.height, coin.sprite));
         engine.addObject(coins[coins.length-1]);
     });
 
@@ -61,16 +61,22 @@ const coins_container = document.querySelector('#coinsContainer');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const engine = new Engine(canvas, 'white');
+//textures
+const player_run_img = document.querySelector('#player_run');
+const coin = document.querySelector('#coin1');
+
+const coin_sprite = new Sprite(coin, 9, 150, 16, 16);
+
+const engine = new Engine(canvas, 'aqua');
 
 //creating gamemap
 const levels_map = [
     {
         coins: 
         [
-            new Coin(475, canvas.height-150, 50, 50, 'yellow'),
-            new Coin(1590, canvas.height-350, 50, 50, 'yellow'),
-            new Coin(1962.5, canvas.height-425, 50, 50, 'yellow'),
+            new Coin(475, canvas.height-150, 50, 50, coin_sprite),
+           // new Coin(1590, canvas.height-350, 50, 50, coin_sprite),
+            //new Coin(1962.5, canvas.height-425, 50, 50, coin_sprite),
         ],
         platforms: [
             new Platform(0, canvas.height-20, 250, 20, 'green'),
@@ -156,7 +162,7 @@ engine.addFrameAction(function(){
 engine.addFrameAction(function(){
 
     if(player.y - 2 * player.width >= canvas.height) die();
-    
+
 });
 
 //adding controls

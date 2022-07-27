@@ -81,12 +81,17 @@ class Engine
     deleteObject(object_index)
     {
         this.game_objects = this.game_objects.filter(function(game_object){
+            if(game_object.id == object_index) game_object.onDelete();
             return game_object.id != object_index
         });
     }
 
     clearObjects()
     {
+        this.game_objects.forEach(function(object){
+            object.onDelete();
+        });
+
         this.game_objects = [];
         this.clear();
     }

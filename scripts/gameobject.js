@@ -21,4 +21,9 @@ class GameObject
         this.draw(canvas_context);
         canvas_context.fill();
     }
+
+    onDelete()
+    {
+
+    }
 }

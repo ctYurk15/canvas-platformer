@@ -39,6 +39,11 @@ body
     box-shadow: 1px 1px 8px gray;
 }
 
+.texture
+{
+    display: none;
+}
+
 #coinsContainer
 {
     position: absolute;
