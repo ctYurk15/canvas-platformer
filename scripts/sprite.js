@@ -6,12 +6,12 @@ class Sprite
     constructor(image, frames, frame_time, crop_width, crop_height)
     {
         this.image = image;
-        this.frames = frames;
+        this.frames = frames-1;
         this.frame_time = frame_time;
         this.crop_width = crop_width;
         this.crop_height = crop_height;
 
-        if(this.frames > 1)
+        if(this.frames > 0)
         {
             this.startAnimation();
         }
@@ -24,17 +24,23 @@ class Sprite
 
     stopAnimation()
     {
-        if(this.animation_interval != null) clearInterval(this.animation_interval);
+        if(this.animation_interval != null) 
+        {
+            clearInterval(this.animation_interval);
+            this.animation_interval = null;
+        }
     }
 
     startAnimation()
     {
-        const self = this;
-
-        self.animation_interval = setInterval(function(){
-            self.current_frame++;
-            if(self.current_frame > self.frames) self.current_frame = 0;
-            console.log(1);
-        }, self.frame_time);
+        if(this.animation_interval == null)
+        {
+            const self = this;
+    
+            this.animation_interval = setInterval(function(){
+                self.current_frame++;
+                if(self.current_frame > self.frames) self.current_frame = 0;
+            }, self.frame_time);
+        }
     }
 }

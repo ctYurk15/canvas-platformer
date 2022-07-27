@@ -1,5 +1,5 @@
 //game config
-const win_distance = 2900;
+const win_distance = 2700;
 const death_interval = 450;
 
 //current state
@@ -33,7 +33,7 @@ function start(engine, level_map)
 
     //rebuild level
     level_map.platforms.forEach(platform => {
-        platforms.push(new Platform(platform.x, platform.y, platform.width, platform.height, platform.color));
+        platforms.push(new Platform(platform.x, platform.y, platform.width, platform.height, platform.sprite));
         engine.addObject(platforms[platforms.length-1]);
     });
 
@@ -63,9 +63,23 @@ canvas.height = window.innerHeight;
 
 //textures
 const player_run_img = document.querySelector('#player_run');
-const coin = document.querySelector('#coin1');
+const coin_texture = document.querySelector('#coin1');
 
-const coin_sprite = new Sprite(coin, 9, 150, 16, 16);
+const small_platform1_texture = document.querySelector('#small-platform1');
+const medium_platform1_texture = document.querySelector('#medium-platform1');
+const big_platform1_texture = document.querySelector('#big-platform1');
+const small_platform2_texture = document.querySelector('#small-platform2');
+const medium_platform2_texture = document.querySelector('#medium-platform2');
+const big_platform2_texture = document.querySelector('#big-platform2');
+
+const coin_sprite = new Sprite(coin_texture, 10, 150, 16, 16);
+
+const small_platform1_sprite = new Sprite(small_platform1_texture, 0, 0, 72, 24);
+const medium_platform1_sprite = new Sprite(medium_platform1_texture, 0, 0, 144, 24);
+const big_platform1_sprite = new Sprite(big_platform1_texture, 0, 0, 288, 24);
+const small_platform2_sprite = new Sprite(small_platform2_texture, 0, 0, 72, 24);
+const medium_platform2_sprite = new Sprite(medium_platform2_texture, 0, 0, 144, 24);
+const big_platform2_sprite = new Sprite(big_platform2_texture, 0, 0, 288, 24);
 
 const engine = new Engine(canvas, 'aqua');
 
@@ -74,23 +88,23 @@ const levels_map = [
     {
         coins: 
         [
-            new Coin(475, canvas.height-150, 50, 50, coin_sprite),
-           // new Coin(1590, canvas.height-350, 50, 50, coin_sprite),
-            //new Coin(1962.5, canvas.height-425, 50, 50, coin_sprite),
+            {x: 475, y: canvas.height-150, width: 50, height: 50, sprite: coin_sprite},
+            {x: 1590, y: canvas.height-350, width: 50, height: 50, sprite: coin_sprite},
+            {x: 1962.5, y: canvas.height-425, width: 50, height: 50, sprite: coin_sprite},
         ],
         platforms: [
-            new Platform(0, canvas.height-20, 250, 20, 'green'),
-            new Platform(300, canvas.height-100, 400, 20, 'green'),
-            new Platform(850, canvas.height-100, 175, 20, 'green'),
-            new Platform(1100, canvas.height-200, 250, 20, 'green'),
-            new Platform(1500, canvas.height-300, 230, 20, 'green'),
-            new Platform(1900, canvas.height-375, 175, 20, 'green'),
-            new Platform(2350, canvas.height-50, 200, 20, 'green'),
-            new Platform(2750, canvas.height-100, 800, 20, 'green'),
+            new Platform(0, canvas.height-48, 288, 48, medium_platform2_sprite),
+            new Platform(425, canvas.height-100, 288, 48, medium_platform1_sprite),
+            new Platform(850, canvas.height-100, 144, 48, small_platform1_sprite),
+            new Platform(1100, canvas.height-200, 288, 48, medium_platform2_sprite),
+            new Platform(1500, canvas.height-300, 288, 48, medium_platform1_sprite),
+            new Platform(1900, canvas.height-375, 144, 48, small_platform2_sprite),
+            new Platform(2350, canvas.height-50, 288, 48, medium_platform1_sprite),
+            new Platform(2750, canvas.height-100, 576, 48, big_platform1_sprite),
         ],
         enemies: [
-            new Enemy(1200, canvas.height-300, 50, 100, 'blue', 2, [1100, 1350]),
-            new Enemy(2875, canvas.height-200, 50, 100, 'blue', 2, [2750, 3150]),
+            new Enemy(1200, canvas.height-300, 50, 100, 'blue', 2, [1100, 1388]),
+            new Enemy(2875, canvas.height-200, 50, 100, 'blue', 2, [2750, 3326]),
         ]
     }
 ];

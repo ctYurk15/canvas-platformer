@@ -15,8 +15,11 @@ class Coin extends Rectangle
         this.sprite.draw(canvas_context, this.x, this.y, this.width, this.height);
     }
 
-    onDelete()
+    onDelete(event_name)
     {
-        this.sprite.stopAnimation();
+        if(event_name == 'clearScene')
+        {
+            this.sprite.stopAnimation();
+        }
     }
 }

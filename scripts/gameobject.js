@@ -22,7 +22,7 @@ class GameObject
         canvas_context.fill();
     }
 
-    onDelete()
+    onDelete(event_name)
     {
 
     }
