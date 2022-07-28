@@ -43,7 +43,7 @@ function start(engine, level_map)
     });
 
     level_map.enemies.forEach(enemy => {
-        enemies.push(new Enemy(enemy.x, enemy.y, enemy.width, enemy.height, enemy.color, enemy.speed, enemy.moving_borders));
+        enemies.push(new Enemy(enemy.x, enemy.y, enemy.width, enemy.height, enemy.sprites, enemy.speed, enemy.moving_borders));
         engine.addObject(enemies[enemies.length-1]);
     });
 
@@ -72,6 +72,9 @@ const small_platform2_texture = document.querySelector('#small-platform2');
 const medium_platform2_texture = document.querySelector('#medium-platform2');
 const big_platform2_texture = document.querySelector('#big-platform2');
 
+const skeleton_walkR_texture = document.querySelector('#skeleton-walkR');
+const skeleton_walkL_texture = document.querySelector('#skeleton-walkL');
+
 const coin_sprite = new Sprite(coin_texture, 10, 150, 16, 16);
 
 const small_platform1_sprite = new Sprite(small_platform1_texture, 0, 0, 72, 24);
@@ -80,6 +83,9 @@ const big_platform1_sprite = new Sprite(big_platform1_texture, 0, 0, 288, 24);
 const small_platform2_sprite = new Sprite(small_platform2_texture, 0, 0, 72, 24);
 const medium_platform2_sprite = new Sprite(medium_platform2_texture, 0, 0, 144, 24);
 const big_platform2_sprite = new Sprite(big_platform2_texture, 0, 0, 288, 24);
+
+const skeleton_walk_spriteR = new Sprite(skeleton_walkR_texture, 6, 150, 15, 31);
+const skeleton_walk_spriteL = new Sprite(skeleton_walkL_texture, 6, 150, 15, 31);
 
 const engine = new Engine(canvas, 'aqua');
 
@@ -103,8 +109,8 @@ const levels_map = [
             new Platform(2750, canvas.height-100, 576, 48, big_platform1_sprite),
         ],
         enemies: [
-            new Enemy(1200, canvas.height-300, 50, 100, 'blue', 2, [1100, 1388]),
-            new Enemy(2875, canvas.height-200, 50, 100, 'blue', 2, [2750, 3326]),
+            new Enemy(1200, canvas.height-293, 48, 93, [skeleton_walk_spriteL, skeleton_walk_spriteR], 2, [1100, 1388]),
+            new Enemy(2875, canvas.height-193, 48, 93, [skeleton_walk_spriteL, skeleton_walk_spriteR], 2, [2750, 3326]),
         ]
     }
 ];
