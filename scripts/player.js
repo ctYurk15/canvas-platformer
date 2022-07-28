@@ -1,12 +1,14 @@
 class Player extends Rectangle
 {
+    direction = 1;
     paralax_scroll = 0;
     can_fall = true;
 
-    constructor(x, y, width, height, color, gravity, speed, jump_force, paralax_borders, engine)
+    constructor(x, y, width, height, sprites, gravity, speed, jump_force, paralax_borders, engine)
     {
-        super(x, y, width, height, color);
+        super(x, y, width, height, 'red');
 
+        this.sprites = sprites;
         this.gravity = gravity;
         this.speed = speed;
         this.jump_force = jump_force;
@@ -14,6 +16,20 @@ class Player extends Rectangle
         this.engine = engine;
 
         this.velocity = {x: 0, y: 0};
+    }
+
+    draw(canvas_context)
+    {
+        let current_sprite = null;
+
+        if(this.direction == 1) current_sprite = this.sprites.right;
+        else if(this.direction == -1) current_sprite = this.sprites.left;
+
+        if(this.velocity.x != 0) current_sprite = current_sprite.walk;
+        else current_sprite = current_sprite.idle;
+        console.log(this.sprites);
+
+        current_sprite.draw(canvas_context, this.x, this.y, this.width, this.height);
     }
 
     render(canvas_context)
@@ -47,6 +63,7 @@ class Player extends Rectangle
     //-1 for left, and +1 for right
     startMove(direction)
     {
+        this.direction = direction;
         this.velocity.x = direction * this.speed;
     }
 

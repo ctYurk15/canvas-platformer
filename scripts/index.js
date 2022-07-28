@@ -48,7 +48,17 @@ function start(engine, level_map)
     });
 
     //respawn player
-    player = new Player(120, 120, 50, 100, 'red', 5, 10, 65, [100, 500], engine);
+    player = new Player(
+        level_map.player.x, 
+        level_map.player.y, 
+        level_map.player.width, 
+        level_map.player.height, 
+        level_map.player.sprites, 
+        level_map.player.gravity, 
+        level_map.player.speed, 
+        level_map.player.jump_force, 
+        level_map.player.paralax_borders, 
+        engine);
     engine.addObject(player);
     
     engine.start();
@@ -62,7 +72,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 //textures
-const player_run_img = document.querySelector('#player_run');
 const coin_texture = document.querySelector('#coin1');
 
 const small_platform1_texture = document.querySelector('#small-platform1');
@@ -71,6 +80,11 @@ const big_platform1_texture = document.querySelector('#big-platform1');
 const small_platform2_texture = document.querySelector('#small-platform2');
 const medium_platform2_texture = document.querySelector('#medium-platform2');
 const big_platform2_texture = document.querySelector('#big-platform2');
+
+const player_walkR_texture = document.querySelector('#player-walkR');
+const player_walkL_texture = document.querySelector('#player-walkL');
+const player_idleR_texture = document.querySelector('#player-IDLER');
+const player_idleL_texture = document.querySelector('#player-IDLEL');
 
 const skeleton_walkR_texture = document.querySelector('#skeleton-walkR');
 const skeleton_walkL_texture = document.querySelector('#skeleton-walkL');
@@ -84,10 +98,28 @@ const small_platform2_sprite = new Sprite(small_platform2_texture, 0, 0, 72, 24)
 const medium_platform2_sprite = new Sprite(medium_platform2_texture, 0, 0, 144, 24);
 const big_platform2_sprite = new Sprite(big_platform2_texture, 0, 0, 288, 24);
 
-const skeleton_walk_spriteR = new Sprite(skeleton_walkR_texture, 6, 150, 15, 31);
-const skeleton_walk_spriteL = new Sprite(skeleton_walkL_texture, 6, 150, 15, 31);
+const player_walkR_sprite = new Sprite(player_walkR_texture, 6, 150, 58, 55);
+const player_walkL_sprite = new Sprite(player_walkL_texture, 6, 150, 58, 55);
+const player_idleR_sprite = new Sprite(player_idleR_texture, 8, 150, 31, 54);
+const player_idleL_sprite = new Sprite(player_idleL_texture, 8, 150, 31, 54);
+
+const skeleton_walkR_sprite = new Sprite(skeleton_walkR_texture, 6, 150, 15, 31);
+const skeleton_walkL_sprite = new Sprite(skeleton_walkL_texture, 6, 150, 15, 31);
 
 const engine = new Engine(canvas, 'aqua');
+
+const player_spritesheet = {
+    right: 
+    {
+        walk: player_walkR_sprite,
+        idle: player_idleR_sprite,
+    }, 
+    left: 
+    {
+        walk: player_walkL_sprite,
+        idle: player_idleL_sprite,
+    }
+};
 
 //creating gamemap
 const levels_map = [
@@ -109,9 +141,10 @@ const levels_map = [
             new Platform(2750, canvas.height-100, 576, 48, big_platform1_sprite),
         ],
         enemies: [
-            new Enemy(1200, canvas.height-293, 48, 93, [skeleton_walk_spriteL, skeleton_walk_spriteR], 2, [1100, 1388]),
-            new Enemy(2875, canvas.height-193, 48, 93, [skeleton_walk_spriteL, skeleton_walk_spriteR], 2, [2750, 3326]),
-        ]
+            new Enemy(1200, canvas.height-293, 48, 93, [skeleton_walkL_sprite, skeleton_walkR_sprite], 2, [1100, 1388]),
+            new Enemy(2875, canvas.height-193, 48, 93, [skeleton_walkL_sprite, skeleton_walkR_sprite], 2, [2750, 3326]),
+        ],
+        player: new Player(120, 120, 106, 103, player_spritesheet, 5, 10, 65, [100, 500], engine)
     }
 ];
 
