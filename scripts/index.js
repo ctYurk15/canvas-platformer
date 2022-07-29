@@ -1,5 +1,4 @@
 //game config
-const win_distance = 2700;
 const death_interval = 450;
 
 //current state
@@ -8,6 +7,7 @@ let platforms = [];
 let coins = [];
 let enemies = [];
 let coins_collected = 0;
+let current_level = 0;
 
 function die()
 {
@@ -15,7 +15,7 @@ function die()
 
     setTimeout(function(){
         engine.clearObjects();
-        start(engine, levels_map[0]);
+        start(engine, levels_map[current_level]);
     }, death_interval);
 }
 
@@ -64,71 +64,22 @@ function start(engine, level_map)
     engine.start();
 }
 
+//configuring canvas
 const canvas = document.querySelector('canvas');
-const win_model = document.querySelector('.win-container');
-const coins_container = document.querySelector('#coinsContainer');
-
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-//textures
-const coin_texture = document.querySelector('#coin1');
-
-const small_platform1_texture = document.querySelector('#small-platform1');
-const medium_platform1_texture = document.querySelector('#medium-platform1');
-const big_platform1_texture = document.querySelector('#big-platform1');
-const small_platform2_texture = document.querySelector('#small-platform2');
-const medium_platform2_texture = document.querySelector('#medium-platform2');
-const big_platform2_texture = document.querySelector('#big-platform2');
-
-const player_walkR_texture = document.querySelector('#player-walkR');
-const player_walkL_texture = document.querySelector('#player-walkL');
-const player_idleR_texture = document.querySelector('#player-IDLER');
-const player_idleL_texture = document.querySelector('#player-IDLEL');
-
-const skeleton_walkR_texture = document.querySelector('#skeleton-walkR');
-const skeleton_walkL_texture = document.querySelector('#skeleton-walkL');
-
-const background1_texture = document.querySelector('#background1');
-
-//sprites
-const coin_sprite = new Sprite(coin_texture, 10, 150, 16, 16);
-
-const small_platform1_sprite = new Sprite(small_platform1_texture, 0, 0, 72, 24);
-const medium_platform1_sprite = new Sprite(medium_platform1_texture, 0, 0, 144, 24);
-const big_platform1_sprite = new Sprite(big_platform1_texture, 0, 0, 288, 24);
-const small_platform2_sprite = new Sprite(small_platform2_texture, 0, 0, 72, 24);
-const medium_platform2_sprite = new Sprite(medium_platform2_texture, 0, 0, 144, 24);
-const big_platform2_sprite = new Sprite(big_platform2_texture, 0, 0, 288, 24);
-
-const player_walkR_sprite = new Sprite(player_walkR_texture, 6, 150, 58, 55);
-const player_walkL_sprite = new Sprite(player_walkL_texture, 6, 150, 58, 55);
-const player_idleR_sprite = new Sprite(player_idleR_texture, 8, 150, 31, 54);
-const player_idleL_sprite = new Sprite(player_idleL_texture, 8, 150, 31, 54);
-
-const skeleton_walkR_sprite = new Sprite(skeleton_walkR_texture, 6, 150, 15, 31);
-const skeleton_walkL_sprite = new Sprite(skeleton_walkL_texture, 6, 150, 15, 31);
-
-const background1_sprite = new Sprite(background1_texture, 0, 0, 320, 180);
+//getting ui-elements
+const win_model = document.querySelector('.win-container');
+const next_level_btn = document.querySelector('#nextLevelButton');
+const coins_container = document.querySelector('#coinsContainer');
 
 const engine = new Engine(canvas, background1_sprite);
-
-const player_spritesheet = {
-    right: 
-    {
-        walk: player_walkR_sprite,
-        idle: player_idleR_sprite,
-    }, 
-    left: 
-    {
-        walk: player_walkL_sprite,
-        idle: player_idleL_sprite,
-    }
-};
 
 //creating gamemap
 const levels_map = [
     {
+        win_distance: 2700,
         coins: 
         [
             {x: 475, y: canvas.height-150, width: 50, height: 50, sprite: coin_sprite},
@@ -136,21 +87,120 @@ const levels_map = [
             {x: 1962.5, y: canvas.height-425, width: 50, height: 50, sprite: coin_sprite},
         ],
         platforms: [
-            new Platform(0, canvas.height-48, 288, 48, medium_platform2_sprite),
-            new Platform(425, canvas.height-100, 288, 48, medium_platform1_sprite),
-            new Platform(850, canvas.height-100, 144, 48, small_platform1_sprite),
-            new Platform(1100, canvas.height-200, 288, 48, medium_platform2_sprite),
-            new Platform(1500, canvas.height-300, 288, 48, medium_platform1_sprite),
-            new Platform(1900, canvas.height-375, 144, 48, small_platform2_sprite),
-            new Platform(2350, canvas.height-50, 288, 48, medium_platform1_sprite),
-            new Platform(2750, canvas.height-100, 576, 48, big_platform1_sprite),
+            {x: 0, y: canvas.height-48, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 425, y: canvas.height-100, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 850, y: canvas.height-100, width: 144, height: 48, sprite: small_platform1_sprite},
+            {x: 1100, y: canvas.height-200, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 1500, y: canvas.height-300, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 1900, y: canvas.height-375, width: 144, height: 48, sprite: small_platform2_sprite},
+            {x: 2350, y: canvas.height-50, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 2750, y: canvas.height-100, width: 576, height: 48, sprite: big_platform1_sprite},
         ],
         enemies: [
-            new Enemy(1200, canvas.height-293, 48, 93, [skeleton_walkL_sprite, skeleton_walkR_sprite], 2, [1100, 1388]),
-            new Enemy(2875, canvas.height-193, 48, 93, [skeleton_walkL_sprite, skeleton_walkR_sprite], 2, [2750, 3326]),
+            {x: 1200, y: canvas.height-293, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [1100, 1388]},
+            {x: 2875, y: canvas.height-193, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [2750, 3326]},
         ],
-        player: new Player(120, 120, 106, 103, player_spritesheet, 5, 10, 65, [100, 500], engine)
-    }
+        player: {
+            x: 120, 
+            y: 200, 
+            width: 106, 
+            height: 103, 
+            sprites: player_spritesheet, 
+            gravity: 5, 
+            speed: 10, 
+            jump_force: 65, 
+            paralax_borders: [100, 500], 
+            engine: engine
+        }
+    },
+    {
+        win_distance: 4000,
+        coins: 
+        [
+            {x: 571, y: canvas.height-250, width: 50, height: 50, sprite: coin_sprite},
+            {x: 763, y: canvas.height-250, width: 50, height: 50, sprite: coin_sprite},
+            {x: 965, y: canvas.height-250, width: 50, height: 50, sprite: coin_sprite},
+            {x: 2247, y: canvas.height-98, width: 50, height: 50, sprite: coin_sprite},
+            {x: 2597, y: canvas.height-98, width: 50, height: 50, sprite: coin_sprite},
+            {x: 2943, y: canvas.height-98, width: 50, height: 50, sprite: coin_sprite},
+            {x: 3293, y: canvas.height-98, width: 50, height: 50, sprite: coin_sprite},
+        ],
+        platforms: [
+            {x: 0, y: canvas.height-120, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 500, y: canvas.height-200, width: 576, height: 48, sprite: big_platform2_sprite},
+            {x: 1300, y: canvas.height-300, width: 576, height: 48, sprite: big_platform1_sprite},
+            {x: 2200, y: canvas.height-48, width: 144, height: 48, sprite: small_platform1_sprite},
+            {x: 2550, y: canvas.height-48, width: 144, height: 48, sprite: small_platform1_sprite},
+            {x: 2900, y: canvas.height-48, width: 144, height: 48, sprite: small_platform1_sprite},
+            {x: 3250, y: canvas.height-48, width: 144, height: 48, sprite: small_platform1_sprite},
+            {x: 3600, y: canvas.height-156, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 4000, y: canvas.height-250, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 4400, y: canvas.height-350, width: 288, height: 48, sprite: medium_platform1_sprite},
+        ],
+        enemies: [
+            {x: 1300, y: canvas.height-393, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [1300, 1876]},
+            {x: 1800, y: canvas.height-393, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [1300, 1876]},
+            {x: 4000, y: canvas.height-343, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [4000, 4288]},
+        ],
+        player: {
+            x: 120, 
+            y: 200, 
+            width: 106, 
+            height: 103, 
+            sprites: player_spritesheet, 
+            gravity: 5, 
+            speed: 10, 
+            jump_force: 65, 
+            paralax_borders: [100, 500], 
+            engine: engine
+        }
+    },
+    {
+        win_distance: 6050,
+        coins: 
+        [
+            {x: 650, y: canvas.height-250, width: 50, height: 50, sprite: coin_sprite},
+            {x: 1371, y: canvas.height-250, width: 50, height: 50, sprite: coin_sprite},
+            {x: 1467, y: canvas.height-250, width: 50, height: 50, sprite: coin_sprite},
+            {x: 2517, y: canvas.height-450, width: 50, height: 50, sprite: coin_sprite},
+            {x: 2709, y: canvas.height-450, width: 50, height: 50, sprite: coin_sprite},
+            {x: 3943, y: canvas.height-200, width: 50, height: 50, sprite: coin_sprite},
+            {x: 5319, y: canvas.height-300, width: 50, height: 50, sprite: coin_sprite},
+            {x: 5919, y: canvas.height-325, width: 50, height: 50, sprite: coin_sprite},
+        ],
+        platforms: [
+            {x: 0, y: canvas.height-48, width: 576, height: 48, sprite: big_platform1_sprite},
+            {x: 800, y: canvas.height-100, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 1300, y: canvas.height-200, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 1850, y: canvas.height-300, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 2350, y: canvas.height-400, width: 576, height: 48, sprite: big_platform2_sprite},
+            {x: 3200, y: canvas.height-48, width: 576, height: 48, sprite: big_platform2_sprite},
+            {x: 3900, y: canvas.height-150, width: 144, height: 48, sprite: small_platform1_sprite},
+            {x: 4200, y: canvas.height-200, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 4700, y: canvas.height-250, width: 288, height: 48, sprite: medium_platform2_sprite},
+            {x: 5219, y: canvas.height-250, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 5800, y: canvas.height-275, width: 288, height: 48, sprite: medium_platform1_sprite},
+            {x: 6400, y: canvas.height-300, width: 288, height: 48, sprite: medium_platform2_sprite},
+        ],
+        enemies: [
+            {x: 800, y: canvas.height-193, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [800, 1088]},
+            {x: 2350, y: canvas.height-493, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [2350, 2926]},
+            {x: 4700, y: canvas.height-343, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [4700, 4988]},
+            {x: 5800, y: canvas.height-368, width: 48, height: 93, sprites: [skeleton_walkL_sprite, skeleton_walkR_sprite], speed: 2, moving_borders: [5800, 6088]},
+        ],
+        player: {
+            x: 120, 
+            y: 200, 
+            width: 106, 
+            height: 103, 
+            sprites: player_spritesheet, 
+            gravity: 5, 
+            speed: 10, 
+            jump_force: 65, 
+            paralax_borders: [100, 500], 
+            engine: engine
+        }
+    },
 ];
 
 //adding platforms collision checks
@@ -209,10 +259,14 @@ engine.addFrameAction(function(){
 
 //check for winning
 engine.addFrameAction(function(){
-    if(player.paralax_scroll >= win_distance)
+    if(player.paralax_scroll >= levels_map[current_level].win_distance)
     {
         engine.stop();
         win_model.classList.remove('hidden');
+
+        if(levels_map.length-1 >= current_level+1) next_level_btn.classList.remove('hidden');
+        else next_level_btn.classList.add('hidden');
+        
     }
 });
 
@@ -232,9 +286,20 @@ engine.addButtonReleaseEvent('KeyD', function(){ player.stopMove(); });
 
 engine.addButtonPressEvent('KeyW', function(){  player.jump(); });
 
-start(engine, levels_map[0]);
+//binding ui-elements
+next_level_btn.addEventListener('click', function(){
+    if(levels_map.length-1 >= current_level+1)
+    {
+        current_level++;
+        engine.clearObjects();
+        start(engine, levels_map[current_level]);
+        win_model.classList.add('hidden')
+    }
+});
 
-//engine.start();
+start(engine, levels_map[current_level]);
+
+//game loop
 let animation_frame;
 function loop()
 {
