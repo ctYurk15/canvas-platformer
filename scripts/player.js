@@ -27,7 +27,6 @@ class Player extends Rectangle
 
         if(this.velocity.x != 0) current_sprite = current_sprite.walk;
         else current_sprite = current_sprite.idle;
-        console.log(this.sprites);
 
         current_sprite.draw(canvas_context, this.x, this.y, this.width, this.height);
     }

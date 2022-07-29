@@ -89,6 +89,9 @@ const player_idleL_texture = document.querySelector('#player-IDLEL');
 const skeleton_walkR_texture = document.querySelector('#skeleton-walkR');
 const skeleton_walkL_texture = document.querySelector('#skeleton-walkL');
 
+const background1_texture = document.querySelector('#background1');
+
+//sprites
 const coin_sprite = new Sprite(coin_texture, 10, 150, 16, 16);
 
 const small_platform1_sprite = new Sprite(small_platform1_texture, 0, 0, 72, 24);
@@ -106,7 +109,9 @@ const player_idleL_sprite = new Sprite(player_idleL_texture, 8, 150, 31, 54);
 const skeleton_walkR_sprite = new Sprite(skeleton_walkR_texture, 6, 150, 15, 31);
 const skeleton_walkL_sprite = new Sprite(skeleton_walkL_texture, 6, 150, 15, 31);
 
-const engine = new Engine(canvas, 'aqua');
+const background1_sprite = new Sprite(background1_texture, 0, 0, 320, 180);
+
+const engine = new Engine(canvas, background1_sprite);
 
 const player_spritesheet = {
     right: 

@@ -7,10 +7,10 @@ class Engine
     frame_actions = [];
     is_working = false;
 
-    constructor(canvas, background_color)
+    constructor(canvas, background)
     {
         this.canvas = canvas;
-        this.background_color = background_color;
+        this.background = background;
         this.context = canvas.getContext('2d');
 
         this.registerEvents();
@@ -67,8 +67,16 @@ class Engine
 
     clear()
     {
-        this.context.fillStyle = this.background_color;
-        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        switch(this.background.constructor.name)
+        {
+            case 'String':
+                this.context.fillStyle = this.background;
+                this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                break;
+            case 'Sprite':
+                this.background.draw(this.context, 0, 0, this.canvas.width, this.canvas.height);
+                break;
+        }
     }
 
     addObject(game_object)
