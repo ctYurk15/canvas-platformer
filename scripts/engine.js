@@ -6,6 +6,7 @@ class Engine
     release_button_actions = [];
     frame_actions = [];
     is_working = false;
+    paused = false;
 
     constructor(canvas, background)
     {
@@ -32,6 +33,19 @@ class Engine
         this.is_working = false;
     }
 
+    togglePause(pause_element)
+    {
+        this.paused = !this.paused;
+        if(this.paused) pause_element.classList.remove('hidden');
+        else pause_element.classList.add('hidden');
+    }
+
+    stopPause(pause_element)
+    {
+        this.paused = false;
+        pause_element.classList.add('hidden');
+    }
+
     addButtonPressEvent(button, action)
     {
         this.button_actions.push({code: button, action: action});
@@ -49,7 +63,7 @@ class Engine
 
     render()
     {
-        if(this.is_working)
+        if(this.is_working && !this.paused)
         {
             this.clear();
 
@@ -104,40 +118,51 @@ class Engine
         this.clear();
     }
 
+    processButtonClick(e)
+    {
+        const self = engine;
+        self.keys[e.code] = true;
+                
+        self.button_actions.forEach(function(button_action){
+            
+            if(self.keys[button_action.code])
+            {
+                button_action.action();
+            }
+
+        });
+    }
+
+    processButtonRelease(e)
+    {
+        const self = engine;
+        self.keys[e.code] = false;
+    
+        self.release_button_actions.forEach(function(release_button_action){
+            
+            if(e.code == release_button_action.code)
+            {
+                release_button_action.action();
+            }
+
+        });
+    }
+
     checkButtonsPress()
     {
         const self = this;
 
-        if(this.is_working)
+        //avoid events duplication
+        window.removeEventListener('keydown', this.processButtonClick, false);
+        window.removeEventListener('keyup', this.processButtonRelease, false);
+
+        if(this.is_working && !this.paused)
         {
             //press button, check all currently pressed butons
-            window.addEventListener('keydown', (e) => {
-            
-                self.keys[e.code] = true;
-                
-                self.button_actions.forEach(function(button_action){
-                    
-                    if(self.keys[button_action.code])
-                    {
-                        button_action.action();
-                    }
-    
-                });
-            });
+            window.addEventListener('keydown', this.processButtonClick);
     
             //release button, check only one released currently button
-            window.addEventListener('keyup', (e) => {
-                self.keys[e.code] = false;
-    
-                self.release_button_actions.forEach(function(release_button_action){
-                    
-                    if(e.code == release_button_action.code)
-                    {
-                        release_button_action.action();
-                    }
-    
-                });
-            });
+            window.addEventListener('keyup', this.processButtonRelease);
         }
     }
 

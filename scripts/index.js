@@ -91,8 +91,10 @@ canvas.height = window.innerHeight;
 //getting ui-elements
 const win_modal = document.querySelector('.win-container');
 const menu_modal = document.querySelector('.menu-container');
+const pause_modal = document.querySelector('.pause-container');
 const next_level_btn = document.querySelector('#nextLevelButton');
-const menu_btn = document.querySelector('#menuButton');
+const continue_level_btn = document.querySelector('#continueLevelBtn');
+const menu_btns = document.querySelectorAll('.menu-button');
 const start_level_btns = document.querySelectorAll(".startLevelBtn");
 const coins_container = document.querySelector('#coinsContainer');
 const total_coins_container = document.querySelector('#totalCoinsContainer');
@@ -311,6 +313,7 @@ engine.addButtonPressEvent('KeyD', function(){  player.startMove(1); });
 engine.addButtonReleaseEvent('KeyD', function(){ player.stopMove(); });
 
 engine.addButtonPressEvent('KeyW', function(){  player.jump(); });
+engine.addButtonPressEvent('Escape', function(){ engine.togglePause(pause_modal); console.log(engine.paused) });
 
 //binding ui-elements
 next_level_btn.addEventListener('click', function(){
@@ -323,16 +326,21 @@ next_level_btn.addEventListener('click', function(){
     }
 });
 
-menu_btn.addEventListener('click', function(){
+menu_btns.forEach(function(menu_btn){
 
-    engine.clearObjects();
-    engine.clear();
+    menu_btn.addEventListener('click', function(){
 
-    menu_modal.classList.remove('hidden');
-    coins_container.classList.add('hidden');
+        engine.stopPause(pause_modal);
+        engine.clearObjects();
+        engine.clear();
+    
+        menu_modal.classList.remove('hidden');
+        coins_container.classList.add('hidden');
+    
+        start_level_btns.forEach(function(start_level_btn){ updateLevelButton(start_level_btn); });
+        updateCoins(progress_tracker, total_coins_container)
+    });
 
-    start_level_btns.forEach(function(start_level_btn){ updateLevelButton(start_level_btn); });
-    updateCoins(progress_tracker, total_coins_container)
 });
 
 start_level_btns.forEach(function(start_level_btn){
@@ -351,6 +359,8 @@ start_level_btns.forEach(function(start_level_btn){
     });
 
 });
+
+continue_level_btn.addEventListener('click', function(){ engine.stopPause(pause_modal); });
 
 updateCoins(progress_tracker, total_coins_container);
 engine.clear();
