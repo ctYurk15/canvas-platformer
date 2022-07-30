@@ -64,17 +64,41 @@ function start(engine, level_map)
     engine.start();
 }
 
+function updateLevelButton(button)
+{
+    const level_index = button.getAttribute('data-level');
+    let can_start = false;
+        
+    if(level_index == 0 || progress_tracker.levelCompleted(level_index-1)) can_start = true;
+
+    if(!can_start) button.setAttribute('disabled', 'disabled');
+    else button.removeAttribute('disabled');
+
+    return can_start;
+}
+
+function updateCoins(progress_tracker, text_container)
+{
+    const total = progress_tracker.getTotalCoins();
+    text_container.innerHTML = 'Total: '+total+' coins';
+}
+
 //configuring canvas
 const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 //getting ui-elements
-const win_model = document.querySelector('.win-container');
+const win_modal = document.querySelector('.win-container');
+const menu_modal = document.querySelector('.menu-container');
 const next_level_btn = document.querySelector('#nextLevelButton');
+const menu_btn = document.querySelector('#menuButton');
+const start_level_btns = document.querySelectorAll(".startLevelBtn");
 const coins_container = document.querySelector('#coinsContainer');
+const total_coins_container = document.querySelector('#totalCoinsContainer');
 
 const engine = new Engine(canvas, background1_sprite);
+const progress_tracker = new Progress();
 
 //creating gamemap
 const levels_map = [
@@ -261,10 +285,12 @@ engine.addFrameAction(function(){
 engine.addFrameAction(function(){
     if(player.paralax_scroll >= levels_map[current_level].win_distance)
     {
-        engine.stop();
-        win_model.classList.remove('hidden');
+        progress_tracker.completeLevel(current_level, coins_collected);
 
-        if(levels_map.length-1 >= current_level+1) next_level_btn.classList.remove('hidden');
+        engine.stop();
+        win_modal.classList.remove('hidden');
+
+        if(levels_map.length >= current_level+1) next_level_btn.classList.remove('hidden');
         else next_level_btn.classList.add('hidden');
         
     }
@@ -293,11 +319,41 @@ next_level_btn.addEventListener('click', function(){
         current_level++;
         engine.clearObjects();
         start(engine, levels_map[current_level]);
-        win_model.classList.add('hidden')
+        win_modal.classList.add('hidden')
     }
 });
 
-start(engine, levels_map[current_level]);
+menu_btn.addEventListener('click', function(){
+
+    engine.clearObjects();
+    engine.clear();
+
+    menu_modal.classList.remove('hidden');
+    coins_container.classList.add('hidden');
+
+    start_level_btns.forEach(function(start_level_btn){ updateLevelButton(start_level_btn); });
+    updateCoins(progress_tracker, total_coins_container)
+});
+
+start_level_btns.forEach(function(start_level_btn){
+
+    const level_index = start_level_btn.getAttribute('data-level');
+    const can_start = updateLevelButton(start_level_btn);
+    
+    start_level_btn.addEventListener('click', function(){
+        if(can_start) 
+        {
+            current_level = parseInt(level_index);
+            start(engine, levels_map[level_index]);
+            menu_modal.classList.add('hidden');
+            coins_container.classList.remove('hidden');
+        }
+    });
+
+});
+
+updateCoins(progress_tracker, total_coins_container);
+engine.clear();
 
 //game loop
 let animation_frame;

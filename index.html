@@ -29,13 +29,21 @@
     <img id="background1" class="texture" src="textures/background1.png">
 
     <canvas></canvas>
-    <div class="win-container hidden">
+    <div class="ui-container win-container hidden">
       <h1>You won!</h1>
       <button id="nextLevelButton" class="hidden">Next Level</button>
-      <button>Menu</button>
+      <button id="menuButton">Menu</button>
     </div>
-    <span id="coinsContainer">Coins: 0</span>
+    <div class="ui-container menu-container">
+      <h1>Game Name</h1>
+      <button class="startLevelBtn" data-level="0">Level 1</button>
+      <button class="startLevelBtn" data-level="1">Level 2</button>
+      <button class="startLevelBtn" data-level="2">Level 3</button>
+      <h1 id="totalCoinsContainer">Total coins: 0</h1>
+    </div>
+    <span id="coinsContainer" class="hidden">Coins: 0</span>
   </body>
+  <script src="scripts/progress.js"></script>
   <script src="scripts/sprite.js"></script>
   <script src="scripts/sprites-import.js"></script>
   <script src="scripts/gameobject.js"></script>

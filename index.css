@@ -10,7 +10,7 @@ body
     display: none !important;
 }
 
-.win-container
+.ui-container
 {
     position: absolute;
     top: 25vh;
@@ -25,7 +25,7 @@ body
     border-radius: 7px;
 }
 
-.win-container button
+.ui-container button
 {
     width: 200px;
     height: 60px;
@@ -34,7 +34,7 @@ body
     cursor: pointer;
 }
 
-.win-container button:hover
+.ui-container button:hover
 {
     box-shadow: 1px 1px 8px gray;
 }
