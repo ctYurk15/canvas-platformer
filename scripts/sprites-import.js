@@ -30,8 +30,8 @@ const big_platform2_sprite = new Sprite(big_platform2_texture, 0, 0, 288, 24);
 
 const player_walkR_sprite = new Sprite(player_walkR_texture, 6, 150, 58, 55);
 const player_walkL_sprite = new Sprite(player_walkL_texture, 6, 150, 58, 55);
-const player_idleR_sprite = new Sprite(player_idleR_texture, 8, 150, 31, 54);
-const player_idleL_sprite = new Sprite(player_idleL_texture, 8, 150, 31, 54);
+const player_idleR_sprite = new Sprite(player_idleR_texture, 8, 150, 31, 54, 0.5);
+const player_idleL_sprite = new Sprite(player_idleL_texture, 8, 150, 31, 54, 0.5);
 
 const skeleton_walkR_sprite = new Sprite(skeleton_walkR_texture, 6, 150, 15, 31);
 const skeleton_walkL_sprite = new Sprite(skeleton_walkL_texture, 6, 150, 15, 31);

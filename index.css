@@ -1,8 +1,14 @@
+@font-face {
+    font-family: 'alagard';
+    src: url('alagard.ttf');
+}
+
 body 
 {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    font-family: 'alagard';
 }
 
 .hidden
@@ -23,15 +29,20 @@ body
     justify-content: center;
     align-items: center;
     border-radius: 7px;
+    background-image: url('textures/ui-bg.jpg');
 }
 
 .ui-container button
 {
     width: 200px;
     height: 60px;
-    font-size: 1.2em;
+    font-size: 1.5em;
     border: 0;
     cursor: pointer;
+    font-family: 'alagard';
+    background-image: url(textures/ui-button.png);
+    background-size: 64px;
+    color: antiquewhite;
 }
 
 .ui-container button:hover

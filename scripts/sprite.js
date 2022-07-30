@@ -3,13 +3,14 @@ class Sprite
     current_frame = 0;
     animation_interval = null;
 
-    constructor(image, frames, frame_time, crop_width, crop_height)
+    constructor(image, frames, frame_time, crop_width, crop_height, width_multiplier = 1)
     {
         this.image = image;
         this.frames = frames-1;
         this.frame_time = frame_time;
         this.crop_width = crop_width;
         this.crop_height = crop_height;
+        this.width_multiplier = width_multiplier;
 
         if(this.frames > 0)
         {
@@ -19,7 +20,7 @@ class Sprite
 
     draw(canvas_context, x, y, width, height)
     {
-        canvas_context.drawImage(this.image, this.crop_width*this.current_frame, 0, this.crop_width,  this.crop_height, x, y, width, height);
+        canvas_context.drawImage(this.image, this.crop_width*this.current_frame, 0, this.crop_width,  this.crop_height, x, y, width * this.width_multiplier, height);
     }
 
     stopAnimation()
